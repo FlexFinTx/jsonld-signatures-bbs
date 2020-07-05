@@ -41,7 +41,8 @@ export class BbsBlsSignature2020 extends suites.LinkedDataProof {
       signer,
       key,
       date,
-      useNativeCanonize
+      useNativeCanonize,
+      LDKeyClass
     } = options;
     // validate common options
     if (
@@ -52,7 +53,7 @@ export class BbsBlsSignature2020 extends suites.LinkedDataProof {
     }
     super({ type: "BbsBlsSignature2020" });
 
-    this.LDKeyClass = Bls12381G2KeyPair;
+    this.LDKeyClass = LDKeyClass ?? Bls12381G2KeyPair;
     this.signer = signer;
     this.verificationMethod = verificationMethod;
     this.proofSignatureKey = "signature";
