@@ -22,7 +22,8 @@ import {
   DeriveProofOptions,
   VerifyProofOptions,
   CreateVerifyDataOptions,
-  CanonizeOptions
+  CanonizeOptions,
+  MatchProofOptions
 } from "./types";
 import { BbsBlsSignature2020 } from "./BbsBlsSignature2020";
 import { randomBytes } from "@stablelib/random";
@@ -36,6 +37,17 @@ export class BbsBlsSignatureProof2020 extends suites.LinkedDataProof {
     this.proofSignatureKey = "signature";
     this.key = key;
     this.useNativeCanonize = useNativeCanonize;
+  }
+
+  /**
+   * @param options {MatchProofOptions} options for matching a proof
+   *
+   * @returns {Promise<boolean>} Resolves indicating whether the proof was matched.
+   */
+  async matchProof(options: MatchProofOptions): Promise<boolean> {
+    return (
+      options.proof.type === this.type || options.proof.type === "/" + this.type
+    );
   }
 
   /**
@@ -57,7 +69,10 @@ export class BbsBlsSignatureProof2020 extends suites.LinkedDataProof {
     let { nonce } = options;
 
     // Validate that the input proof document has a proof compatible with the suite
-    if (proof.type !== "BbsBlsSignature2020") {
+    if (
+      proof.type !== "/BbsBlsSignature2020" ||
+      proof.type == "BbsBlsSignature2020"
+    ) {
       throw new TypeError(
         "proof document proof incompatible, expected proof type of BbsBlsSignature2020"
       );

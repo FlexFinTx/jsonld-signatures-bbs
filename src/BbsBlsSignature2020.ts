@@ -19,6 +19,7 @@ import {
   CreateProofOptions,
   CanonizeOptions,
   CreateVerifyDataOptions,
+  MatchProofOptions,
   VerifyProofOptions,
   VerifySignatureOptions,
   SuiteSignOptions
@@ -74,6 +75,18 @@ export class BbsBlsSignature2020 extends suites.LinkedDataProof {
       }
     }
     this.useNativeCanonize = useNativeCanonize;
+  }
+
+  /**
+   * @param options {MatchProofOptions} options for matching a proof
+   * TODO DEBT work around caused by vc-js strict usage of security vocab
+   *
+   * @returns {Promise<boolean>} Resolves indicating whether the proof was matched.
+   */
+  async matchProof(options: MatchProofOptions): Promise<boolean> {
+    return (
+      options.proof.type === this.type || options.proof.type === "/" + this.type
+    );
   }
 
   /**
